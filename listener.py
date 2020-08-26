@@ -115,12 +115,10 @@ def msg_reply(period):
 
 async def auth_report(author):
     r_read = reddit_read()
-    central_timezone = pytz.timezone("US/Central")
     subs = {}
     for comment in author.comments.new(limit=1000):
         if comment.subreddit.display_name not in subs:
             subs[comment.subreddit.display_name] = SubredditReport(r_read.subreddit(comment.subreddit.display_name))
-#        creation_time = datetime.fromtimestamp(comment.created_utc).astimezone(central_timezone)
         subs[comment.subreddit.display_name].add_comment(comment)
     return(subs)
 
