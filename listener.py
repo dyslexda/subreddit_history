@@ -110,7 +110,7 @@ def msg_reply(period):
         com_history = 'you joined our community within the last day'
     elif period == 'week':
         com_history = 'you joined our community within the last week'
-    msg = (f"Hello, and thank you for partiipating in /r/wisconsin! It appears {com_history}. Please make sure you review our [community guidelines](https://www.reddit.com/r/wisconsin/about/rules/) and [recent rule updates regarding increased outside activity](https://old.reddit.com/r/wisconsin/comments/iglpc4/welcome_new_users_from_other_websites_and/).")
+    msg = (f"Hello, and thank you for participating in /r/wisconsin! It appears {com_history}. Please make sure you review our [community guidelines](https://www.reddit.com/r/wisconsin/about/rules/) and [recent rule updates regarding increased outside activity](https://old.reddit.com/r/wisconsin/comments/iglpc4/welcome_new_users_from_other_websites_and/).")
     return(msg)
 
 async def auth_report(author):
