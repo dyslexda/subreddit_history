@@ -110,11 +110,10 @@ def msg_reply(period):
         com_history = 'you joined our community within the last day'
     elif period == 'week':
         com_history = 'you joined our community within the last week'
-    msg = (f"Hello, and thank you for participating in /r/wisconsin! It appears {com_history}. Please make sure you review our [community guidelines](https://www.reddit.com/r/wisconsin/about/rules/) and [recent rule updates regarding increased outside activity](https://old.reddit.com/r/wisconsin/comments/iglpc4/welcome_new_users_from_other_websites_and/).")
+    msg = (f"Hello, and thank you for participating in /r/wisconsin! It appears {com_history}. Please make sure you review our [community guidelines](https://www.reddit.com/r/wisconsin/about/rules/) and [recent rule updates regarding increased outside activity](https://old.reddit.com/r/wisconsin/comments/iglpc4/welcome_new_users_from_other_websites_and/) . \n\n *I am a bot and this action was performed automatically based on analyzing your last 1000 comments.*")
     return(msg)
 
-async def auth_report(author):
-    r_read = reddit_read()
+async def auth_report(r_read,author):
     subs = {}
     for comment in author.comments.new(limit=1000):
         if comment.subreddit.display_name not in subs:
@@ -126,14 +125,14 @@ async def listener():
     target_sub = 'wisconsin'
     r_read = reddit_read()
     r_send = reddit_send()
-    for comment in r_read.subreddit(target_sub).stream.comments():
-        if comment_level(comment):
-            subs = await auth_report(comment.author)
+    for comment in r_read.subreddit(target_sub).stream.comments(skip_existing = True):
+        if comment_level(comment) and (comment.author.name != 'Subreddit_History'):
+            subs = await auth_report(r_read,comment.author)
             try:
                 reply = False
                 day_old = subs[target_sub].posts_older_than('day')
                 week_old = subs[target_sub].posts_older_than('week')
-                if len(subs[target_sub]) == 1:
+                if len(subs[target_sub].comments) == 1:
                     msg = msg_reply('new')
                     reply = True
                 elif (day_old == 0):
@@ -144,9 +143,10 @@ async def listener():
                     reply = True
                 if reply:
                     send_comment = r_send.comment(id=comment.id)
-                    send_comment.reply(msg)
-            except:
-                print(comment.permalink)
+                    replied = send_comment.reply(msg)
+                    print(replied.permalink)
+            except Exception as e:
+                print(e, comment.permalink)
 
 async def get_refresh():
     r = reddit_connect()
@@ -156,7 +156,13 @@ async def get_refresh():
 #    print(url)
 #    print(r.auth.authorize('0avQEiNqrNaX2Pi7wb-t7KcAD14'))
 
+async def test():
+    r_send = reddit_send()
+    comment_r = r_send.comment(id='g2qcatz')
+    comment_r.reply('hello')
+
 
 
 if __name__ == "__main__":
     asyncio.run(listener())
+#    asyncio.run(test())
