@@ -154,15 +154,7 @@ async def get_refresh():
 #    state = str(random.randint(0, 65000))
 #    url = r.auth.url(["*"], state, "permanent")
 #    print(url)
-#    print(r.auth.authorize('0avQEiNqrNaX2Pi7wb-t7KcAD14'))
-
-async def test():
-    r_send = reddit_send()
-    comment_r = r_send.comment(id='g2qcatz')
-    comment_r.reply('hello')
-
-
+#    print(r.auth.authorize(''))
 
 if __name__ == "__main__":
     asyncio.run(listener())
-#    asyncio.run(test())
